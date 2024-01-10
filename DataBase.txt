@@ -1,0 +1,271 @@
+-- Clear Table
+-- SET FOREIGN_KEY_CHECKS = 0;
+-- DROP TABLE IF EXISTS users;
+-- DROP TABLE IF EXISTS restaurants;
+-- DROP TABLE IF EXISTS like_res;
+-- DROP TABLE IF EXISTS food_type;
+-- DROP TABLE IF EXISTS foods;
+-- DROP TABLE IF EXISTS orders;
+-- DROP TABLE IF EXISTS rate_res;
+-- DROP TABLE IF EXISTS sub_foods;
+-- SET FOREIGN_KEY_CHECKS = 1;
+
+-- tạo Table Users
+CREATE TABLE users (
+	user_id int PRIMARY KEY auto_increment,
+	full_name VARCHAR(150) NOT NULL,
+	email VARCHAR(255) NOT NULL,
+	password VARCHAR(150) NOT NULL
+);
+
+INSERT INTO users (full_name, email, password) 
+VALUES 
+('John Doe', 'john.doe@example.com', 'password123'),
+('Jane Smith', 'jane.smith@example.com', 'pass456'),
+('Alice Johnson', 'alice.johnson@example.com', 'secure789'),
+('Bob Thompson', 'bob.thompson@example.com', 'mypassword'),
+('Eva Williams', 'eva.williams@example.com', 'secret123'),
+('Mike Davis', 'mike.davis@example.com', 'mysecretpass'),
+('Olivia Moore', 'olivia.moore@example.com', 'newpass321'),
+('Daniel Lee', 'daniel.lee@example.com', 'passwordxyz'),
+('Sophia Wilson', 'sophia.wilson@example.com', 'securepass'),
+('Alex Miller', 'alex.miller@example.com', 'mypassword123');
+	
+-- tạo table restaurant
+CREATE table restaurants (
+	res_id int PRIMARY key auto_increment,
+	res_name VARCHAR(100) NOT NULL,
+	image VARCHAR(255) NOT NULL,
+	descript VARCHAR(255) 
+);
+
+INSERT INTO restaurants (res_name, image, descript)
+VALUES 
+('Restaurant A', 'restaurant_a.jpg', 'A cozy place with delicious food'),
+('Restaurant B', 'restaurant_b.jpg', 'Authentic cuisine with a modern twist'),
+('Restaurant C', 'restaurant_c.jpg', 'Family-friendly atmosphere and diverse menu'),
+('Restaurant D', 'restaurant_d.jpg', 'Exquisite dining experience with a view'),
+('Restaurant E', 'restaurant_e.jpg', 'Casual dining spot with live music');
+
+
+-- tạo table like nhà hàng cho người người dùng
+CREATE TABLE like_res ( 
+	like_resID int PRIMARY key auto_increment,
+	user_id int,
+	FOREIGN KEY (user_id) REFERENCES users(user_id),
+	
+	res_id int,
+	FOREIGN KEY (res_id) REFERENCES restaurants(res_id),
+	
+	date_like datetime
+);
+
+INSERT INTO like_res (user_id, res_id, date_like)
+VALUES
+(1, 1, '2023-11-14 08:30:00'),
+(2, 2, '2023-11-15 12:45:00'),
+(1, 3, '2023-11-16 18:20:00'),
+(4, 4, '2023-11-17 09:10:00'),
+(8, 5, '2023-11-18 15:30:00'),
+(6, 1, '2023-11-19 20:15:00'),
+(7, 1, '2023-11-20 11:40:00'),
+(2, 1, '2023-11-21 14:25:00'),
+(6, 2, '2023-11-22 17:55:00'),
+(2, 2, '2023-11-23 10:05:00'),
+(1, 2, '2023-11-14 08:30:00'),
+(2, 5, '2023-11-15 12:45:00'),
+(1, 5, '2023-11-16 18:20:00'),
+(4, 5, '2023-11-17 09:10:00'),
+(1, 5, '2023-11-18 15:30:00'),
+(6, 1, '2023-11-19 20:15:00'),
+(7, 1, '2023-11-20 11:40:00'),
+(8, 1, '2023-11-21 14:25:00'),
+(1, 2, '2023-11-22 17:55:00'),
+(2, 2, '2023-11-23 10:05:00');
+
+
+-- tạo table rating nhà hàng
+CREATE TABLE rate_res (
+	rate_resID int PRIMARY key auto_increment,
+	user_id int,
+	FOREIGN KEY (user_id) REFERENCES users(user_id),
+	
+	res_id int,
+	FOREIGN KEY (res_id) REFERENCES restaurants(res_id),
+	
+	amount int,
+	date_rate datetime
+);
+
+INSERT INTO rate_res (user_id, res_id, amount, date_rate) VALUES
+(1, 3, 4, '2023-11-14 08:30:00'),
+(2, 5, 5, '2023-11-15 12:45:00'),
+(1, 1, 3, '2023-11-16 18:20:00'),
+(4, 1, 4, '2023-11-17 09:10:00'),
+(6, 2, 5, '2023-11-18 15:30:00'),
+(6, 3, 4, '2023-11-19 20:15:00'),
+(4, 2, 3, '2023-11-20 11:40:00'),
+(8, 5, 5, '2023-11-21 14:25:00'),
+(2, 1, 4, '2023-11-22 17:55:00'),
+(10, 2, 5, '2023-11-23 10:05:00'),
+(1, 2, 3, '2023-11-24 13:20:00'),
+(2, 3, 4, '2023-11-25 16:45:00'),
+(2, 4, 5, '2023-11-26 09:30:00'),
+(4, 4, 3, '2023-11-27 22:10:00'),
+(8, 5, 4, '2023-11-28 19:05:00');
+
+-- tạo table type food
+CREATE TABLE food_type (
+	type_id int PRIMARY key auto_increment,
+	type_name VARCHAR(100)
+);
+
+INSERT INTO food_type (type_name)
+VALUES
+('Italian'),
+('Japanese'),
+('Mexican'),
+('Indian'),
+('Chinese'),
+('Thai'),
+('Mediterranean'),
+('American'),
+('French'),
+('Vietnamese');
+
+-- tạo table food
+CREATE TABLE foods (
+	food_id int PRIMARY key auto_increment,
+	food_name VARCHAR(100) NOT null,
+	image VARCHAR(255) NOT NULL,
+	price FLOAT NOT NULL,
+	descript VARCHAR(255),
+	type_id int NOT NULL,
+	FOREIGN KEY (type_id) REFERENCES food_type(type_id)
+);
+
+INSERT INTO foods (food_name, image, price, descript, type_id)
+VALUES 
+('Margherita Pizza', 'margherita_pizza.jpg', 12.99, 'Classic pizza with tomato, mozzarella, and basil', 1),
+('Sushi Platter', 'sushi_platter.jpg', 24.99, 'Assorted sushi rolls with soy sauce and wasabi', 2),
+('Taco Sampler', 'taco_sampler.jpg', 9.99, 'A variety of tacos with different fillings', 3),
+('Butter Chicken', 'butter_chicken.jpg', 16.99, 'Creamy and flavorful Indian butter chicken', 4),
+('General Tsos Chicken', 'general_tsos_chicken.jpg', 14.99, 'Sweet and spicy Chinese chicken dish', 5),
+('Pad Thai', 'pad_thai.jpg', 11.99, 'Traditional Thai stir-fried noodles with shrimp and tofu', 6),
+('Greek Salad', 'greek_salad.jpg', 8.99, 'Fresh salad with tomatoes, cucumbers, olives, and feta', 7),
+('Cheeseburger', 'cheeseburger.jpg', 9.99, 'Classic American cheeseburger with fries', 8),
+('Coq au Vin', 'coq_au_vin.jpg', 18.99, 'French chicken braised in red wine with mushrooms', 9),
+('Pho', 'pho.jpg', 10.99, 'Traditional Vietnamese noodle soup with beef or chicken', 10),
+('Vegetarian Pasta', 'vegetarian_pasta.jpg', 13.99, 'Pasta with a variety of fresh vegetables', 10),
+('Vegan Buddha Bowl', 'vegan_buddha_bowl.jpg', 15.99, 'A nutritious bowl with a mix of plant-based ingredients', 9),
+('Gluten-Free Pizza', 'gluten_free_pizza.jpg', 14.99, 'Pizza with a gluten-free crust and various toppings', 8),
+('Seafood Paella', 'seafood_paella.jpg', 22.99, 'Spanish rice dish with a variety of seafood', 7),
+('Ribeye Steak', 'ribeye_steak.jpg', 29.99, 'Juicy ribeye steak cooked to perfection', 6),
+('Chicken Nuggets', 'chicken_nuggets.jpg', 6.99, 'Crispy and delicious chicken nuggets with dipping sauce', 5),
+('Chocolate Fondue', 'chocolate_fondue.jpg', 8.99, 'Assorted fruits and treats for dipping in chocolate', 4),
+('Cappuccino', 'cappuccino.jpg', 4.99, 'Rich and creamy Italian cappuccino', 3),
+('Barbecue Ribs', 'barbecue_ribs.jpg', 19.99, 'Succulent barbecue ribs with tangy sauce', 2),
+('Craft Beer Sampler', 'craft_beer_sampler.jpg', 12.99, 'A selection of craft beers for tasting', 1);
+
+-- tạo table thông tin food
+CREATE TABLE sub_foods (
+	sub_id int PRIMARY KEY auto_increment,
+	sub_name VARCHAR(100) NOT NULL,
+	sub_price FLOAT NOT NULL,
+	food_id int,
+	FOREIGN KEY (food_id) REFERENCES foods(food_id)
+);
+
+INSERT INTO sub_foods (sub_name, sub_price, food_id) VALUES
+('Extra Cheese', 1.5, 1),
+('Spicy Mayo', 0.75, 2),
+('Guacamole', 2.0, 3),
+('Naan Bread', 1.25, 4),
+('Egg Roll', 1.0, 5),
+('Tofu Stir-fry', 2.5, 6),
+('Olives Mix', 0.5, 7),
+('Bacon', 1.75, 8),
+('Truffle Oil', 2.25, 9),
+('Cilantro Lime Rice', 1.0, 10),
+('Mushrooms', 1.0, 11),
+('Cheddar Cheese', 1.5, 12),
+('Wasabi', 0.5, 13),
+('Pico de Gallo', 1.25, 14),
+('Saffron Rice', 2.0, 15),
+('Ice Cream', 2.5, 16),
+('Onion Rings', 1.75, 17),
+('Raspberry Sauce', 1.0, 18),
+('Truffle Fries', 2.25, 19),
+('Sweet Potato Fries', 1.5, 20);
+
+-- tạo table người dùng order
+CREATE TABLE orders (
+	order_id int PRIMARY key auto_increment,
+	user_id int not null,
+	FOREIGN KEY (user_id) REFERENCES users(user_id),
+	
+	food_id int not null,
+	FOREIGN KEY (food_id) REFERENCES foods(food_id),
+	
+	amount int,
+	code VARCHAR(255),
+	arr_sub_id VARCHAR(255)
+);
+
+INSERT INTO orders (user_id, food_id, amount, code, arr_sub_id)
+VALUES
+(1, 5, 2, 'ORDER123', 'SUB123'),
+(2, 10, 1, 'ORDER456', 'SUB456'),
+(1, 3, 3, 'ORDER789', 'SUB789'),
+(4, 15, 2, 'ORDERABC', 'SUBABC'),
+(4, 8, 1, 'ORDERDEF', 'SUBDEF'),
+(6, 20, 3, 'ORDERGHI', 'SUBGHI'),
+(2, 12, 1, 'ORDERJKL', 'SUBJKL'),
+(8, 7, 2, 'ORDERMNO', 'SUBMNO'),
+(9, 1, 2, 'ORDERPQR', 'SUBPQR'),
+(1, 18, 1, 'ORDERSUV', 'SUBSUV'),
+(1, 14, 3, 'ORDERXYZ', 'SUBXYZ'),
+(2, 6, 1, 'ORDER123', 'SUB123'),
+(2, 9, 2, 'ORDER456', 'SUB456'),
+(4, 4, 1, 'ORDER789', 'SUB789'),
+(6, 19, 2, 'ORDERABC', 'SUBABC'),
+(6, 11, 1, 'ORDERDEF', 'SUBDEF'),
+(1, 16, 3, 'ORDERGHI', 'SUBGHI'),
+(1, 13, 2, 'ORDERJKL', 'SUBJKL'),
+(2, 2, 1, 'ORDERMNO', 'SUBMNO'),
+(8, 17, 3, 'ORDERPQR', 'SUBPQR');
+
+
+
+-- 5 người like nhiều nhất
+SELECT COUNT(lr.user_id) as total_like_by_user, u.user_id, full_name  FROM like_res as lr
+INNER JOIN users as u
+on lr.user_id = u.user_id
+GROUP by u.user_id
+ORDER by COUNT(lr.user_id) DESC
+LIMIT 5;
+
+-- 2 nhà hàng có lượt like nhiều nhất , rs.res_id, rs.res_name
+SELECT COUNT(lr.res_id) as total_like_of_restaurant, rs.res_id, rs.res_name  FROM like_res as lr
+LEFT JOIN restaurants as rs
+on lr.res_id = rs.res_id
+GROUP BY rs.res_id
+ORDER BY COUNT(lr.res_id) DESC
+LIMIT 2;
+
+
+-- Khách hàng order nhiều nhất
+SELECT COUNT(o.user_id) as total_order, u.user_id, u.full_name FROM orders as o
+INNER JOIN users as u 
+on o.user_id = u.user_id
+GROUP BY u.user_id 
+LIMIT 1;
+
+
+-- Người dùng không hoạt động trong hệ thông (không like, không order, không rating restaurant)
+SELECT * FROM users as u
+LEFT JOIN like_res as lk on u.user_id = lk.user_id
+LEFT JOIN rate_res as rr on u.user_id = rr.user_id
+LEFT JOIN orders as o on u.user_id = o.user_id
+WHERE lk.user_id is NULL && rr.user_id is NULL && o.user_id is NULL;
+

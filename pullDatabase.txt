@@ -1,0 +1,1 @@
+yarn sequelize-auto -h localhost -d node38 -u root -x 1234 -p 3307 --dialect mysql -o src/models -l esm

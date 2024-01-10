@@ -1,0 +1,43 @@
+- list Like by UserID: 
+http://localhost:13639/user/list-like-res-by-user/2
+
+- List Rate by UserID: 
+http://localhost:13639/user/list-like-res-by-user/11
+
+- List Like by ResID:
+http://localhost:13639/restaurant/list-like-res-by-resid/6
+
+- List Rate by ResID: 
+http://localhost:13639/restaurant/list-rate-res-by-resid/6
+
+- Order Food by User: 
+http://localhost:13639/user/order-food-by-user
+
+body: {
+    "user_id": "3",
+    "food_id": "10",
+    "amount": "2",
+    "code": "ORDER3639",
+    "arr_sub_id": "SUB123"
+}
+
+- Rating Restaurant by User: 
+http://localhost:13639/user/rate-restaurant-by-user
+
+body : {
+    "user_id": "1",
+    "res_id": "5",
+    "amount": "5",
+    "date_rate": "2023-11-16 18:20:00"
+}
+
+
+- Like or Unlike Restaurant by User: 
+http://localhost:13639/user/like-or-unlike-restaurant
+
+body : {
+    "user_id": "1",
+    "res_id": "3",
+    "date_like": "2023-11-16 18:20:00"
+}
+

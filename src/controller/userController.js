@@ -7,11 +7,11 @@ const handldeListLikeByUser = async (req, res) => {
     let dataUser = await checkUserExsited(userID);
 
     if (dataUser) {
-      let data = await conn.like_res.findAll({
+      let data = await conn.users.findOne({
         include: [
           {
-            model: conn.users,
-            attributes: ["user_id", "full_name"],
+            model: conn.like_res,
+            attributes: ["user_id", "res_id", "date_like"],
             where: { user_id: userID },
           },
         ],
@@ -20,13 +20,13 @@ const handldeListLikeByUser = async (req, res) => {
         },
       });
 
-      if (data.length > 0) {
+      if (data) {
         res.status(200).send(data);
       } else {
         res.status(404).send("User didn't like");
       }
     } else {
-      res.status(404).send("This user is not available");
+      res.status(404).send("This user is not exsited on Database");
     }
   } catch (error) {
     res.status(404).send(error);
@@ -39,11 +39,11 @@ const handldeListRateByUser = async (req, res) => {
     let dataUser = await checkUserExsited(userID);
 
     if (dataUser) {
-      let data = await conn.rate_res.findAll({
+      let data = await conn.users.findOne({
         include: [
           {
-            model: conn.users,
-            attributes: ["user_id", "full_name"],
+            model: conn.rate_res,
+            attributes: ["user_id", "res_id", "amount", "date_rate"],
             where: { user_id: userID },
           },
         ],
@@ -52,7 +52,7 @@ const handldeListRateByUser = async (req, res) => {
         },
       });
 
-      if (data.length > 0) {
+      if (data) {
         res.status(200).send(data);
       } else {
         res.status(404).send("User is doesn't rate");

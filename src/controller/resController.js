@@ -8,13 +8,13 @@ const handleListLikeByResID = async (req, res) => {
         res_id: resID,
       },
     });
-    console.log(dataRes);
+
     if (dataRes) {
-      let data = await conn.like_res.findAll({
+      let data = await conn.restaurants.findOne({
         include: [
           {
-            model: conn.restaurants,
-            attributes: ["res_id", "res_name"],
+            model: conn.like_res,
+            attributes: ["user_id", "res_id", "date_like"],
             where: { res_id: resID },
           },
         ],
@@ -22,7 +22,8 @@ const handleListLikeByResID = async (req, res) => {
           res_id: resID,
         },
       });
-      if (data.length > 0) {
+
+      if (data) {
         res.status(200).send(data);
       } else {
         res.status(404).send("This Restaunrant nobody like");
@@ -45,11 +46,11 @@ const handleListRateByResID = async (req, res) => {
     });
     console.log(dataRes);
     if (dataRes) {
-      let data = await conn.rate_res.findAll({
+      let data = await conn.restaurants.findAll({
         include: [
           {
-            model: conn.restaurants,
-            attributes: ["res_id", "res_name"],
+            model: conn.rate_res,
+            attributes: ["user_id", "res_id", "amount", "date_rate"],
             where: { res_id: resID },
           },
         ],
@@ -57,7 +58,7 @@ const handleListRateByResID = async (req, res) => {
           res_id: resID,
         },
       });
-      if (data.length > 0) {
+      if (data) {
         res.status(200).send(data);
       } else {
         res.status(404).send("This Restaunrant nobody rate");
